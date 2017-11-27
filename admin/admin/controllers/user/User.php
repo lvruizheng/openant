@@ -49,6 +49,11 @@ class User extends MY_Controller {
 		$this->get_from();
 	}
 
+	public function add(){
+		
+		$this->load->view('theme/default/template/user/user_add',$data);
+	}
+
 	private function get_list()
 	{
 		$this->document->addStyle(base_url('resources/public/resources/default/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'));
