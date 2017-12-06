@@ -96,4 +96,4 @@ $(".ystep1").loadStep({
   <!-- /row --> 
 </div>
 <!-- /container -->
-<?php echo $footer;//装载header?>
+<?php echo $footer;//装载footer?>

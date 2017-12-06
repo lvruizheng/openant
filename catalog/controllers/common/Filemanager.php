@@ -13,6 +13,7 @@ class FileManager extends CI_Controller {
 		
 		if (!is_dir(IMGPATH . '/users/'.$user_directory)) {
 			@mkdir(IMGPATH . '/users/'.$user_directory, 0777,true);
+			//chmod(IMGPATH . '/users/'.$user_directory,0777);
 		}
 		
 	}
@@ -308,7 +309,7 @@ class FileManager extends CI_Controller {
 		if (!$json) {
 			$filename = date("Ymdhms").random_string('alnum', 10).'.'.pathinfo($filename)['extension'];
 			move_uploaded_file($_FILES['file']['tmp_name'], $directory . '/' . $filename);
-
+			
 			$json['success'] = $this->lang->line('text_uploaded');
 		}
 

@@ -8,7 +8,7 @@
       	<div class="panel-heading row row-panel-heading bg-info">
 	        <p class="navbar-left"> <i class="glyphicon glyphicon-th-list"></i>&nbsp;会员列表</p>
 			<div class="navbar-right btn-group" role="group" aria-label="..." style="margin-right: 0">
-				<a href="<?php echo $this->config->item('admin').'user/user/add'?>" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-plus"></i></a>
+				<!--a href="<?php echo $this->config->item('admin').'user/user/add'?>" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-plus"></i></a-->
 				<button type="button" class="btn btn-sm btn-default"><i class="glyphicon glyphicon-trash"></i></button>
 			</div>
 	    </div>

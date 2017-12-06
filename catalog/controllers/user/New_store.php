@@ -33,7 +33,6 @@ class New_store extends MY_Controller {
 		
 		$data['information']=$information_ifo;
 		
-		
 		$data['header']					=$this->header->index();
 		$data['top']					=$this->header->step_top();
 		$data['footer']					=$this->footer->index();

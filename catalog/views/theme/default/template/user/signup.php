@@ -40,7 +40,7 @@
 								<img title="<?php echo lang_line('refresh');?>"
 											src="<?php echo $this->config->item('catalog').'common/captcha';?>"
 											align="absbottom"
-											onclick="this.src='<?php echo $this->config->item('catalog');?>/common/captcha?'+Math.random();">
+											onclick="this.src='<?php echo $this->config->item('catalog');?>common/captcha?'+Math.random();">
 								</img>
 							</div>
 							<!-- /field -->

@@ -50,18 +50,17 @@ class User extends MY_Controller {
 	}
 
 	public function add(){
-		
-		$this->load->view('theme/default/template/user/user_add',$data);
+
 	}
 
 	private function get_list()
 	{
 		$this->document->addStyle(base_url('resources/public/resources/default/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css'));
 		$this->document->addScript(base_url('resources/public/resources/default/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js'));
-		$data=array();
 		
 		if($this->input->get()){
-			if($this->input->get('nickname') != NULL){
+			$data = $this->valid_user_info($this->input->get());
+			/*if($this->input->get('nickname') != NULL){
 				if($this->form_validation->no_special($this->input->get('nickname'))){
 					$data['nickname']=$this->input->get('nickname');
 				}else{
@@ -103,7 +102,7 @@ class User extends MY_Controller {
 				}else{
 					$this->error['ip']='ip格式不正确';
 				}
-			}
+			}*/
 		}
 		
 		if($this->input->get('page')){
@@ -698,4 +697,56 @@ class User extends MY_Controller {
 			return true;
 		}
 	}
+
+	//验证用户信息
+	private function valid_user_info($info){
+		$data = array();
+		
+		if($info['nickname'] != NULL){
+			if($this->form_validation->no_special($info['nickname'])){
+				$data['nickname']=$info['nickname'];
+			}else{
+				$this->error['nickname']='昵称不能有特殊字符！';
+			}
+		}	
+		if($info['user_group_id'] != NULL){
+			if($this->form_validation->integer($info['user_group_id'])){
+				$data['user_group_id']=$info['user_group_id'];
+			}else{
+				$this->error['user_group_id']='用户组不对';
+			}
+		}
+		
+		if($info['date_added'] != NULL){
+			if($this->form_validation->no_y_m_d($info['date_added'])){
+				$data['date_added']=$info['date_added'];
+			}else{
+				$this->error['date_added']='日期格式不正确';
+			}
+		}
+		if($info['email'] != NULL){
+			if($this->form_validation->valid_email($info['email'])){
+				$data['email']=$info['email'];
+			}else{
+				$this->error['email']='邮箱格式不正确';
+			}
+		}
+		if($info['status'] != NULL){
+			if($this->form_validation->in_list($info['status'],'0,1')){
+				$data['status']=$info['status'];
+			}else{
+				$this->error['status']='状态不正确';
+			}
+		}
+		if($info['ip'] != NULL){
+			if($this->form_validation->valid_ip($info['ip'])){
+				$data['ip']=$info['ip'];
+			}else{
+				$this->error['ip']='ip格式不正确';
+			}
+		}
+
+		return $data;
+	}
+
 }

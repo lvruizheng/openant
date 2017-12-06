@@ -125,8 +125,6 @@ class Product extends MY_Controller{
 			$data['bases']=$product_info;
 		}
 		
-		$data['child_id']=$this->input->post('child_id');
-		$data['parent_id']=$this->input->post('parent_id');
 		if($this->input->post('child_id') != NULL){
 			$category_id=$this->input->post('child_id');
 		}elseif($this->input->post('parent_id') != NULL){
