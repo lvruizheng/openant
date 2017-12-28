@@ -301,7 +301,13 @@ class Product_model extends CI_Model{
 		}
 
 		if(isset($data['order_by'])){
-			$this->db->order_by($data['order_by']);
+			if($data['order_by'] == 'price_desc'){
+				$this->db->order_by('product.price' , 'DESC');
+			}else if($data['order_by'] == 'price_asc'){
+				$this->db->order_by('product.price' , 'ASC');				
+			}else{
+				$this->db->order_by('product.'.$data['order_by'], 'DESC');
+			}
 		}else{
 			//默认排序
 			$this->db->order_by('product.seo_order', 'DESC');
@@ -321,7 +327,7 @@ class Product_model extends CI_Model{
 			$this->load->library('phpanalysis');
 			$this->phpanalysis->SetSource ($data['search']);
 			$this->phpanalysis->StartAnalysis ( true );
-			$tags = $this->phpanalysis->GetFinallyKeywords ( 5 ); // 获取3个关键字
+			$tags = $this->phpanalysis->GetFinallyKeywords ( 3 ); // 获取3个关键字
 			
 			$tags = explode(',', $tags);
 				

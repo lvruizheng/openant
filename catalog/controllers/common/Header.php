@@ -25,6 +25,19 @@ class Header extends CI_Common {
 			$data['title']=unserialize($this->config->get_config('site_abbreviation'))[$_SESSION['language_id']];
 		}
 		
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			$this->document->addStyle(base_url('resources/public/resources/mobile/lib/weui.min.css'));
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/jquery-weui.css'));
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/style.css'));
+
+			//$this->document->addScript(base_url('resources/public/resources/mobile/lib/jquery-2.1.4.js'));
+			$this->document->addScript(base_url('resources/public/resources/mobile/lib/fastclick.js'));
+			$this->document->addScript(base_url('resources/public/resources/mobile/js/jquery-weui.js'));
+			$this->document->addScript(base_url('resources/public/resources/mobile/js/swiper.js'));
+			$this->document->addScript(base_url('resources/public/resources/mobile/js/jquery.Spinner.js'));
+			$this->document->addScript(base_url('resources/public/resources/mobile/js/jquery-weui.js'));
+		}
+		
 		$data['description']=$this->document->getDescription();
 		$data['copyright']=$this->document->getCopyright();
 		$data['keywords']=$this->document->getKeywords();
@@ -32,8 +45,15 @@ class Header extends CI_Common {
 		$data['links']=$this->document->getLinks();
 		$data['styles']=$this->document->getStyles();
 		$data['scripts']=$this->document->getScripts();
+
+		$data['action_search']=$this->input->get('search');
 		
-		return $this->load->view('theme/default/template/common/header',$data,TRUE);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			return $this->load->view('theme/default/template/mobile/m_header',$data,TRUE);
+		}else{
+			return $this->load->view('theme/default/template/common/header',$data,TRUE);
+		}
 	}
 	
 	public function top(){

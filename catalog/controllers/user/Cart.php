@@ -99,7 +99,7 @@ class Cart extends MY_Controller{
 				$data[0] = array(
 					'id'      => $product_ids,
 					'qty'     => (int)$qtys,
-					'price'   => round($product_price['price'], 4),
+					'price'   => round($product_price['price'], 4)*$qtys,
 					'name'    => $names,
 					'options' => $options,
 					'points'  => $product_price['points']
@@ -109,7 +109,7 @@ class Cart extends MY_Controller{
 				$data[0] = array(
 					'id'      => $product_ids,
 					'qty'     => (int)$qtys,
-					'price'   => round($product_price['price'], 4),
+					'price'   => round($product_price['price'], 4)*$qtys,
 					'name'    => $names,
 					'points'  => $product_price['points']
 				);

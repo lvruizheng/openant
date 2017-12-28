@@ -35,7 +35,12 @@ class position_bottom extends CI_Common{
 				$data['modules'][]=$this->$module_name->index($modules[$key]['setting'], 'bottom');
 			}
 		}
-		$this->html=$this->load->view('theme/default/template/common/position_bottom', $data, true);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			$this->html=$this->load->view('theme/default/template/common/m_position_bottom', $data, true);
+		}else{
+			$this->html=$this->load->view('theme/default/template/common/position_bottom', $data, true);	
+		}
 	}
 	public function index() {
 		

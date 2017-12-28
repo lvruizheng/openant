@@ -108,7 +108,10 @@ class Signin extends CI_Controller {
 		}
 		
 		if($load == TRUE){
-			$this->load->view('theme/default/template/user/signin',$data);
+			if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)
+				$this->load->view('theme/default/template/user/m_signin',$data);
+			else
+				$this->load->view('theme/default/template/user/signin',$data);
 		}
 	}
 	
@@ -186,7 +189,10 @@ class Signin extends CI_Controller {
 		}
 		
 		if($load == TRUE){
-			$this->load->view('theme/default/template/user/signup',$data);
+			if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)			
+				$this->load->view('theme/default/template/user/m_signup',$data);
+			else
+				$this->load->view('theme/default/template/user/signup',$data);
 		}
 		
 	}

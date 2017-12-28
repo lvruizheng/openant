@@ -18,7 +18,7 @@ class Extension extends MY_Controller{
 	}
 	public function install_module(){
 		$this->document->setTitle ( '扩展模块安装' );
-		
+
 		if($this->check_modify() && $this->input->get ( 'extension' )){
 			$data ['code'] = $this->input->get ( 'extension' );
 			$data ['type'] = 'module';

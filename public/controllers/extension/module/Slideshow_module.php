@@ -23,7 +23,11 @@ class Slideshow_module extends CI_Extension {
 			$data['banners']=$banners;
 			$data['setting']=$setting;
 			
-			return $this->load->view('theme/default/template/extension/module/slideshow_module', $data, TRUE);
+			
+			if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)
+				return $this->load->view('theme/default/template/extension/module/m_slideshow_module', $data, TRUE);
+			else
+				return $this->load->view('theme/default/template/extension/module/slideshow_module', $data, TRUE);
 		}else{
 			return FALSE;
 		}

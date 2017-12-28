@@ -38,16 +38,41 @@ class Product_module extends CI_Extension{
 			
 			$html =false;
 				
-			if($position == 'left' || $position == 'right'){
-				$html = $this->load->view('theme/default/template/extension/module/product_left_right_module', $data, TRUE);
-			}
-				
-			if($position == 'top' || $position == 'bottom'){
-				$html = $this->load->view('theme/default/template/extension/module/product_top_bottom_module', $data, TRUE);
-			}
-				
-			if($position == 'above'){
-				$html = $this->load->view('theme/default/template/extension/module/product_above_module', $data, TRUE);
+			
+			if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+				if($position == 'left' || $position == 'right'){
+					$html = $this->load->view('theme/default/template/extension/module/m_product_left_right_module', $data, TRUE);
+				}
+					
+				if($position == 'top' || $position == 'bottom'){
+					if($setting['order'] == 'time'){
+						$html = $this->load->view('theme/default/template/extension/module/m_product_time_bottom_module', $data, TRUE);
+					}
+					
+					if($setting['order'] == 'sales'){
+						$html = $this->load->view('theme/default/template/extension/module/m_product_sales_bottom_module', $data, TRUE);
+					}
+					
+					if($setting['order'] == 'RANDOM'){
+						$html = $this->load->view('theme/default/template/extension/module/m_product_random_bottom_module', $data, TRUE);
+					}
+				}
+					
+				if($position == 'above'){
+					$html = $this->load->view('theme/default/template/extension/module/m_product_above_module', $data, TRUE);
+				}
+			}else{
+				if($position == 'left' || $position == 'right'){
+					$html = $this->load->view('theme/default/template/extension/module/product_left_right_module', $data, TRUE);
+				}
+					
+				if($position == 'top' || $position == 'bottom'){
+					$html = $this->load->view('theme/default/template/extension/module/product_top_bottom_module', $data, TRUE);
+				}
+					
+				if($position == 'above'){
+					$html = $this->load->view('theme/default/template/extension/module/product_above_module', $data, TRUE);
+				}
 			}
 				
 			return $html;

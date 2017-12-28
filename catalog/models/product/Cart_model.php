@@ -22,8 +22,8 @@ class Cart_model extends CI_Model{
 			
 			$cart['id']=$data[$key]['id'];
 			$cart['user_id']=$user_id;
-			$cart['qty']=$data[$key]['qty'];
-			$cart['price']=$data[$key]['price'];
+			//$cart['qty']=$data[$key]['qty'];
+			//$cart['price']=$data[$key]['price'];
 			$cart['name']=$data[$key]['name'];
 			$cart['rowid']=md5($cart['id'].serialize($cart['options']).$_SESSION['cart_id']);
 			$cart['points']=$data[$key]['points'];
@@ -35,14 +35,23 @@ class Cart_model extends CI_Model{
 				$cart['preferential_value']=$data[$key]['preferential_value'];
 			}
 			
-			$this->db->select('rowid');
+			$this->db->select('rowid,qty,price');
 			$this->db->where($cart);
 			$this->db->from($this->db->dbprefix('user_cart'));
 			$query=$this->db->get();
+
 			if($query->num_rows() > 0){
-				$this->db->where('rowid', $cart['rowid']);
+				$cart_info = $query->result_array();	
+				$this->db->where($cart);
+
+				$cart['qty'] = $cart_info[0]['qty'] + $data[$key]['qty'];
+				$cart['price'] = $cart_info[0]['price'] + $data[$key]['price'];
+
 				$this->db->update($this->db->dbprefix('user_cart'), $cart);
 			}else{
+				$cart['qty'] = $data[$key]['qty'];
+				$cart['price'] = $data[$key]['price'];
+				
 				$this->db->insert($this->db->dbprefix('user_cart'), $cart);
 			}
 			

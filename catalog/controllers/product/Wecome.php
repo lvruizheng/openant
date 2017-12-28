@@ -111,7 +111,11 @@ class Wecome extends CI_Controller{
 		$data['top']=$this->header->top();
 		$data['footer']=$this->footer->index();
 		
-		$this->load->view('theme/default/template/product/wecome',$data);
+		//var_dump($data['product']);die;
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/product/m_wecome',$data);
+		else
+			$this->load->view('theme/default/template/product/wecome',$data);
 	}
 	
 	//统计访问量

@@ -1005,18 +1005,18 @@ class CI_Phpanalysis
          foreach( $arr as $k => $v )
          {
             //排除长度为1的词
-            if( strlen($k)==1 ) {
+            /*if( strlen($k)==1 ) {
                 continue;
-            }
+		 }*/
             //排除长度为2的非英文词
-            elseif( strlen($k)==2 && preg_match('/[^0-9a-zA-Z]/', $k) ) {
+            if( strlen($k)==2 && preg_match('/[^0-9a-zA-Z]/', $k) ) {
                 continue;
             
             }
             //排除单个中文字
-            elseif( strlen($k) < 4 && !preg_match('/[a-zA-Z]/', $k)) {
+            /*elseif( strlen($k) < 4 && !preg_match('/[a-zA-Z]/', $k)) {
                 continue;
-            }
+			}*/
             $okstr .= ($okstr=='' ? $k : ','.$k);
             $n++;
             if( $n > $num ) break;

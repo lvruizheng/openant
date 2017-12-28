@@ -43,6 +43,11 @@ class Category extends CI_Controller {
 				$data['category_id']=$ids[0];
 			}
 		}
+
+		if($this->input->get('order_by')){
+			$order_by = $this->input->get('order_by');
+			$data['order_by'] = $order_by;
+		}
 		
 		$category_info=$this->category_model->get_category_to_category($this->input->get('id'));
 		
@@ -57,7 +62,7 @@ class Category extends CI_Controller {
 		}
 		
 		//分页
-		$config['base_url'] 			= $this->config->item('catalog').'product/category?id='.$this->input->get('id');
+		$config['base_url'] 			= $this->config->item('catalog').'/product/category?id='.$this->input->get('id');
 		$config['num_links'] 			= 2;
 		$config['page_query_string'] 	= TRUE;
 		$config['query_string_segment'] = 'page';
@@ -138,8 +143,21 @@ class Category extends CI_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->top();
 		$data['footer']=$this->footer->index();
+
 		
-		$this->load->view('theme/default/template/product/category',$data);
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			if($this->input->get(comefrom) != null && $this->input->get(comefrom) == 'scroll'){
+				if($data['products']){
+					return $this->load->view('theme/default/template/product/m_category_list',$data);
+				}else{
+					return false;
+				}
+			}else{
+				$this->load->view('theme/default/template/product/m_category',$data);
+			}
+		}else{
+			$this->load->view('theme/default/template/product/category',$data);
+		}
 	}
 	
 	public function category_all()

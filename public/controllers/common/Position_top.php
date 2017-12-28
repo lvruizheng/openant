@@ -11,9 +11,9 @@ class position_top extends CI_Common{
 		if(!$layout_id){
 			return;
 		}
-		
+
 		$modules_id=$this->layout_model->select_module_ids($layout_id, 'top');
-		
+
 		if(!$modules_id){
 			return;
 		}
