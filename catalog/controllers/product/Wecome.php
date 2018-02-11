@@ -10,7 +10,7 @@ class Wecome extends CI_Controller{
 		$this->lang->load('product/category', $_SESSION['language_name']);
 		
 		$this->load->library(array('currency'));
-		$this->load->model(array('product/product_model'));
+		$this->load->model(array('product/product_model','common/wishlist_model','product/cart_model'));
 		if($this->input->get('product_id') == NULL){
 			$this->document->setTitle(lang_line('no_product'));
 			$this->header->no_find();
@@ -99,6 +99,12 @@ class Wecome extends CI_Controller{
 			}
 			$data['option_image']=$option_image;
 		}
+
+		//获取购物车
+		$data['carts']=$this->cart_model->get_carts();
+
+		//判断是否收藏
+		$data['iswish'] = $this->wishlist_model->get_wishinfo($this->input->get('product_id'));
 		
 		$data['product_id']=$this->input->get('product_id');
 		

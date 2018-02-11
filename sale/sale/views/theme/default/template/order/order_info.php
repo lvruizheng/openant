@@ -16,7 +16,7 @@
 			<?php echo $position_top; ?>
 			<?php if(!empty($orders)):?>
 				<p style="margin-bottom: 0">物流信息</p><hr style="margin: 2px 0">
-				<div>快递单号：<?php echo $orders['payment_address'];?></div>
+				<div>快递单号：<?php echo $orders['logistic'];?></div>
 				<hr style="margin: 2px 0">
 				<p style="margin-bottom: 0">商家信息</p><hr style="margin: 2px 0">
 				<div class="col-sm-6">商家昵称：<?php echo $orders['u_nickname'];?></div>

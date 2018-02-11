@@ -10,6 +10,18 @@ class Edit extends MY_Controller {
 		$this->load->model(array('common/user_model'));
 	}
 
+	public function edit_pass_type(){
+		$data['position_top']=$this->position_top->index();
+		$data['position_left']=$this->position_left->index();
+		$data['position_right']=$this->position_right->index();
+		$data['position_bottom']=$this->position_bottom->index();
+		
+		$data['header']=$this->header->index();
+		$data['top']=$this->header->user_top();
+		$data['footer']=$this->footer->index();
+		$this->load->view('theme/default/template/user/m_edit_pass_type',$data);
+	}
+
 	public function edit_paswd()
 	{
 		$this->document->setTitle('修改登陆密码');
@@ -44,7 +56,11 @@ class Edit extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/edit_paswd',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/user/m_edit_paswd',$data);
+		else
+			$this->load->view('theme/default/template/user/edit_paswd',$data);
 	}
 	
 	public function verify_current_password(){
@@ -81,7 +97,7 @@ class Edit extends MY_Controller {
 			}
 			exit;
 		}
-		
+
 		$data=array();
 		$data['user_info']=$this->user_model->get_user_info($_SESSION['user_id']);
 		
@@ -93,7 +109,11 @@ class Edit extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/edit_user_info',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/user/m_edit_user_info',$data);
+		else
+			$this->load->view('theme/default/template/user/edit_user_info',$data);
 	}
 	
 	public function sender_email_check(){
@@ -185,7 +205,11 @@ class Edit extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/edit_pay_password',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/user/m_edit_pay_password',$data);
+		else
+			$this->load->view('theme/default/template/user/edit_pay_password',$data);
 	}
 	
 	public function edit_avatar()

@@ -13,11 +13,16 @@ class Cart extends MY_Controller{
 
 	public function index(){
 		$this->document->setTitle('购物车');
-		$this->document->addScript(base_url('resources/public/resources/default/js/spinner/jquery.spinner.min.js'));
-		$this->document->addStyle(base_url('resources/public/resources/default/css/spinner/bootstrap-spinner.css'));
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){	
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/base.css'));
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/module.css'));
+		}else{
+			$this->document->addScript(base_url('resources/public/resources/default/js/spinner/jquery.spinner.min.js'));
+			$this->document->addStyle(base_url('resources/public/resources/default/css/spinner/bootstrap-spinner.css'));
 		
-		$this->document->addStyle(base_url('resources/public/resources/default/css/ystep/ystep.css'));
-		$this->document->addScript(base_url('resources/public/resources/default/js/ystep/ystep.js'));
+			$this->document->addStyle(base_url('resources/public/resources/default/css/ystep/ystep.css'));
+			$this->document->addScript(base_url('resources/public/resources/default/js/ystep/ystep.js'));
+		}	
 		
 		$carts=$this->cart_model->get_carts();
 		
@@ -63,9 +68,13 @@ class Cart extends MY_Controller{
 		
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->step_top();
+		$data['footer_nav']=$this->footer->footer_nav('cart');
 		$data['footer']=$this->footer->index();
 		
-		$this->load->view('theme/default/template/user/cart',$data);
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+			$this->load->view('theme/default/template/user/m_cart',$data);
+		else
+			$this->load->view('theme/default/template/user/cart',$data);
 	}
 	
 	public function add(){

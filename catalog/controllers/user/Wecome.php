@@ -8,7 +8,7 @@ class Wecome extends MY_Controller {
 		$this->load->helper(array('utf8'));
 		$this->load->language('wecome');
 		$this->load->library(array('currency'));
-		$this->load->model(array('common/user_model', 'order/order_model', 'order/user_balances_model', 'common/wishlist_model'));
+		$this->load->model(array('common/user_model', 'order/order_model', 'order/user_balances_model', 'common/wishlist_model' ,'product/cart_model'));
 	}
 
 	public function index()
@@ -25,7 +25,9 @@ class Wecome extends MY_Controller {
 		
 		$data['user']=$user;
 		
-		$data['balances']=$this->user_balances_model->get_balances($this->user->getId())['balances'];
+		$balance_info = $this->user_balances_model->get_balances($this->user->getId());
+		$data['balances']=$balance_info['balances'];
+		$data['integral']=$balance_info['integral'];
 		
 		$count_orders=$this->order_model->count_orders();
 		
@@ -36,11 +38,12 @@ class Wecome extends MY_Controller {
 				}
 				
 				if($count_orders[$k]['order_status_id'] == $this->config->get_config('to_be_delivered')){
-					$data['count_to_be_delivered']=$count_orders[$k]['count'];
+					//$data['count_to_be_delivered']=$count_orders[$k]['count'];
+					$data['count_inbound_state']=$count_orders[$k]['count'];
 				}
 				
 				if($count_orders[$k]['order_status_id'] == $this->config->get_config('inbound_state')){
-					$data['count_inbound_state']=$count_orders[$k]['count'];
+					$data['count_inbound_state']+=$count_orders[$k]['count'];
 				}
 				
 				if($count_orders[$k]['order_status_id'] == $this->config->get_config('state_to_be_evaluated')){
@@ -96,7 +99,6 @@ class Wecome extends MY_Controller {
 		$data['pagination'] = $this->pagination->create_links();
 		//待收货订单
 		
-		
 		$data['position_top']=$this->position_top->index();
 		$data['position_left']=$this->position_left->index();
 		$data['position_right']=$this->position_right->index();
@@ -104,8 +106,14 @@ class Wecome extends MY_Controller {
 		
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
+		$data['footer_nav']=$this->footer->footer_nav('user');
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/wecome',$data);
+
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/user/m_wecome',$data);
+		else
+			$this->load->view('theme/default/template/user/wecome',$data);
 	}
 	
 	public function get_order_wecome(){

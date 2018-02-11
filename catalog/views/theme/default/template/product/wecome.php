@@ -276,7 +276,7 @@
 					<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">
 						<?php echo lang_line('t_review');?>
 						<?php if(isset($product['reviews'])):?>
-						<span class="badge"><?php echo count($product['reviews']);?></span>
+							<span class="badge"><?php echo count($product['reviews']);?></span>
 						<?php endif;?>
 					</a>
 				</li>
@@ -350,6 +350,7 @@
 			$('#'+id+' .active').removeClass('active');
 			$('#'+id+' .option-id-'+cl).addClass('active');
 		
+			console.log(group_id,'###',cl,taxs);
 			var re=is_select_all(group_id, cl);
 			
 			if(re !== false){

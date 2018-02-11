@@ -12,18 +12,20 @@ class Address_model extends CI_Model {
 		if(empty($user_id)){
 			return FALSE;
 		}
-		$this->db->select('address.address_id');
+		$this->db->select('address.mobile,address.lastname, address.firstname,address.address_id');
 		$this->db->where('address.user_id', $user_id);
 		$this->db->from($this->db->dbprefix('address'));
 		$query = $this->db->get();
 		
 		if($query->num_rows() > 0){
 			$address_ids=$query->result_array();
-			$address_ids=array_flip(array_flip(array_column($address_ids,'address_id')));
+			//$address_ids=array_flip(array_flip(array_column($address_ids,'address_id')));
 			
-			foreach($address_ids as $key=>$address_id){
-				$row[$key]['address_id']=$address_ids[$key];
-				$row[$key]['address']=$this->get_address($address_ids[$key]);
+			foreach($address_ids as $key=>$val){
+				$row[$key]['address_id']=$val['address_id'];
+				$row[$key]['address']=$this->get_address($val['address_id']);
+				$row[$key]['name'] = $val['firstname'].$val['lastname'];
+				$row[$key]['mobile'] = $val['mobile'];
 			}
 			return $row;
 		}
@@ -105,7 +107,7 @@ class Address_model extends CI_Model {
 			return FALSE;
 		}
 		
-		$this->db->select('lastname, firstname, address, postcode, city, country_id, zone_id');
+		$this->db->select('lastname, firstname,mobile, address, postcode, city, country_id, zone_id');
 		$this->db->where('address.address_id', $address_id);
 		
 		$this->db->from($this->db->dbprefix('address'));

@@ -122,7 +122,7 @@
 							</a>
 						</li>
 						<li>
-							<a onclick="logout();">
+							<a href="javascript:;" onclick="logout();">
 								退出帐号
 							</a>
 						</li>

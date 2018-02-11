@@ -30,7 +30,11 @@ class Address extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/address',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+			$this->load->view('theme/default/template/user/m_address',$data);
+		else
+			$this->load->view('theme/default/template/user/address',$data);
 	}
 	
 	public function add(){
@@ -78,6 +82,27 @@ class Address extends MY_Controller {
 				redirect('user/address');
 			}
 		}
+	}
+
+	//编辑页面
+	public function edit(){
+		if($this->input->get('address_id') != NULL){
+			$data['address_info']=$this->address_model->get_address_tofrom($this->input->get('address_id'));
+		}else{
+			$data['address_info']=FALSE;
+		}
+		$data['countrys']=$this->location_model->get_countrys();
+
+		$data['position_top']=$this->position_top->index();
+		$data['position_left']=$this->position_left->index();
+		$data['position_right']=$this->position_right->index();
+		$data['position_bottom']=$this->position_bottom->index();
+		
+		$data['header']=$this->header->index();
+		$data['top']=$this->header->user_top();
+		$data['footer']=$this->footer->index();
+
+		$this->load->view('theme/default/template/user/m_edit_address',$data);
 	}
 	
 	public function delete(){

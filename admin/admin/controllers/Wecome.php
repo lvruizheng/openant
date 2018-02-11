@@ -11,6 +11,7 @@ class Wecome extends MY_Controller {
 
 	public function index()
 	{
+		$this->check_modify();
 		$this->document->setTitle('管理中心');
 		
 		$data['position_top']=$this->position_top->index();
@@ -22,5 +23,15 @@ class Wecome extends MY_Controller {
 		$data['top']=$this->header->top();
 		$data['footer']=$this->footer->index();
 		$this->load->view('theme/default/template/wecome',$data);
+	}
+	
+	public function check_modify(){
+		if(!$this->user->hasPermission('access', 'admin/wecome')){
+			$this->session->set_flashdata('fali', '你没有访问管理员后台的权限！');
+			redirect(base_url(), 'location', 301);
+			exit;
+		}else{
+			return true;
+		}
 	}
 }

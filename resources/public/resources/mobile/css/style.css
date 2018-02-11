@@ -267,6 +267,37 @@ header,.weui-navbar{
 .address-name{font-size:15px; font-weight:bold; color:#232323;}
 .address-name span{margin-right:10px;}
 
+.user-info{
+	margin-top: 45px;
+	font-size: 14px;
+	background: #fff;
+}
+.user-info dl,
+.user-info dl dt{
+	border-bottom: 1px solid #e5e5e5;
+}
+.user-info dl dt,
+.user-info dl dd{
+	padding: 5px 10px;
+}
+.user-info dl dd{
+	color: #999;
+}
+.user-info dl dd strong{
+	font-weight: normal;
+}
+.ok-info{
+	padding: 40px 0;
+	text-align: center;
+	line-height: 3.5
+}
+.ok-info dd a{
+	background: #f00;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
 .ord-pro-link{font-size:14px; font-weight:normal; color:#232323;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;word-wrap: normal;word-wrap: break-word;word-break: break-all; line-height:1.8; display:block;}
 .wy-pro-pri.ord-pri{padding:0 0 5px 0;}
 .sitem-tip{padding:2px 6px;background: #e21323;color: #fff;font-size:12px;font-style: normal;}
@@ -350,7 +381,7 @@ header,.weui-navbar{
 .com-txt-area{margin:0;}
 .weui-textarea.txt-area{ font-size:13px; font-family:Helvetica,STHeiti STXihei, Microsoft JhengHei, Microsoft YaHei, Arial; font-weight:normal;}
 .com-button {position:fixed;z-index: 999;bottom: 0;left: 0;clear: both;width: 100%;height:60px;padding-top: 10px;background: #fff;;text-align: center;}
-.com-button a {margin: 0 auto;display: block;width: 90%;height: 39px;line-height: 39px;background: #fff;border: 1px solid #ff4d55;border-radius: 4px;color: #ff4d55;font-size: 14px;}
+.com-button #submit {margin: 0 auto;display: block;width: 90%;height: 39px;line-height: 39px;background: #fff;border: 1px solid #ff4d55;border-radius: 4px;color: #ff4d55;font-size: 14px;}
 
 /*--login---*/
 .login-box{width:100%;overflow:hidden;margin:0 auto;}

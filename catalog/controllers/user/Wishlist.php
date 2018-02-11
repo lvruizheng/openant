@@ -62,7 +62,16 @@ class Wishlist extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/wishlist',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){		
+			if($this->input->is_ajax_request()){
+				$this->load->view('theme/default/template/user/m_wishlist_list',$data);
+			}else{
+				$this->load->view('theme/default/template/user/m_wishlist',$data);
+			}
+		}else{
+			$this->load->view('theme/default/template/user/wishlist',$data);
+		}
 	}
 	
 	public function add(){
@@ -77,4 +86,18 @@ class Wishlist extends MY_Controller {
 			->set_content_type('application/json')
 			->set_output(json_encode($json));
 	}
+
+	public function remove(){
+		if($this->input->post('product_id')){
+			if($this->wishlist_model->remove($this->input->post('product_id'))){
+				$json['success']='移除成功';
+			}
+		}
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($json));	
+	}
+
+
 }

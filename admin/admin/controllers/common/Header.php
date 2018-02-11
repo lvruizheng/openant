@@ -13,11 +13,13 @@ class Header extends CI_Common{
 		//写令牌
 		$this->tool_model->writer_token();
 		
+		/*	
 		if(!$this->user->hasPermission('access', 'admin/wecome')){
 			$this->session->set_flashdata('fali', '你没有访问管理员后台的权限！');
 			redirect(base_url(), 'location', 301);
 			exit;
 		}
+		 */
 	}
 	public function index(){
 		$data ['title'] = $this->document->getTitle ().'-'.unserialize($this->config->get_config('site_abbreviation'))[$_SESSION['language_id']];
@@ -60,5 +62,15 @@ class Header extends CI_Common{
 	
 		require_once(FCPATH.'public/view/page_missing.php');
 		exit();
+	}
+
+	public function check_modify(){
+		if(!$this->user->hasPermission('access', 'admin/wecome')){
+			$this->session->set_flashdata('fali', '你没有访问管理员后台的权限！');
+			redirect(base_url(), 'location', 301);
+			exit;
+		}else{
+			return true;
+		}
 	}
 }

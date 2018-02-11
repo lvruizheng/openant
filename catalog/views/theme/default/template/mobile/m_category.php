@@ -51,6 +51,7 @@
 		<?php endforeach;?>
 	<?php endif;?>
   
+<?php echo $footer_nav; ?>
 </div>
 
 

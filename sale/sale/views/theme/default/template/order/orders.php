@@ -91,15 +91,15 @@
 							<td class="text-center col-md-1 col-sm-1 col-xs-2 border-right"><span><?php echo $order['status_name']; ?></span><a href="<?php echo $this->config->item('sale').'order/orders/order_info?order_id='.$order['order_id'];?>">订单详情</a></td>
 							<td class="text-center col-md-2 col-sm-2 col-xs-2">
 							<?php if($order['order_status_id'] == $this->config->get_config('default_order_status')):?>
-							<button type="button" class="btn btn-default btn-sm">等待付款</button>
+								<button type="button" class="btn btn-default btn-sm">等待付款</button>
 							<?php elseif($order['order_status_id'] == $this->config->get_config('to_be_delivered')):?>
-							<button type="button" class="btn btn-default btn-sm">发货</button>
+								<button id="edit_order_logistic" order_id="<?php echo $order['order_id'];?>" order_id_sub="<?php echo date('YmdHis',strtotime($order['date_added'])).'-'.$order['order_id'];?>" type="button" class="btn btn-default btn-sm" data-toggle="modal" onclick="show_modal(this)">待发货</button>
 							<?php elseif($order['order_status_id'] == $this->config->get_config('inbound_state')):?>
-							<button type="button" class="btn btn-default btn-sm">待确认收货</button>
+								<button type="button" class="btn btn-default btn-sm">待确认收货</button>
 							<?php elseif($order['order_status_id'] == $this->config->get_config('state_to_be_evaluated')):?>
-							<button type="button" class="btn btn-default btn-sm">待评价</button>
+								<button type="button" class="btn btn-default btn-sm">待评价</button>
 							<?php elseif($order['order_status_id'] == $this->config->get_config('refund_order')):?>
-							<button type="button" class="btn btn-default btn-sm">退款中</button>
+								<button type="button" class="btn btn-default btn-sm">退款中</button>
 							
 							<?php endif;?>
 							
@@ -142,7 +142,64 @@
 		<?php echo $position_right; ?>
 	</div>
 	<!-- /row -->
-	<script>
+
+<!-- 模态框示例（Modal） -->
+<form method="post" action="<?php echo $this->config->item('sale').'order/orders/edit_logistic'; ?>" class="form-horizontal" role="form" id="form_data" style="margin: 20px;">
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        发货
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="user_id" class="col-sm-3 control-label">订单号</label>
+                            <div class="col-sm-9">
+								<input type="hidden" value="" name="order_id" id="order_id_input">
+                                <span id="order_id_view" style="color:red;"></span>
+                            </div>
+                        </div>
+                       
+                        <div class="form-group">
+                            <label for="lastname" class="col-sm-3 control-label">物流单号</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="logistic" value="" id="logistic" placeholder="物流单号" required>
+                            </div>
+                        </div>
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                    </button>
+                    <button type="submit" class="btn btn-primary">
+                        提交
+                    </button><span id="tip"> </span>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+	</div>
+</form>
+
+<script>	
+		function show_modal(o){
+			$('#addUserModal').modal();
+			$('#form_data #order_id_view').text($(o).attr('order_id_sub'));
+			$('#form_data #order_id_input').val($(o).attr('order_id'));	
+		}
+
+		//禁止模态框缓存
+		$('body').on('hidden.bs.modal', '#form_data', function () {
+			//$(this).removeData('bs.modal');
+			$('#form_data #logistic').val('');
+		});		
+
 		function callout(id, type){
 			var content=$('#'+type+'-'+id).val();
 			$.ajax({

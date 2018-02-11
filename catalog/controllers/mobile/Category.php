@@ -28,6 +28,7 @@ class Category extends CI_Controller {
 		
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->top();
+		$data['footer_nav']=$this->footer->footer_nav('category');
 		$data['footer']=$this->footer->index();
 		
 		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Wecome extends CI_Controller {
+class Wecome extends MY_Controller {
 	
 	public function __construct() {
 		parent::__construct();
@@ -12,6 +12,8 @@ class Wecome extends CI_Controller {
 
 	public function index()
 	{
+		$this->check_modify();
+
 		$this->document->setTitle('商家中心');
 		
 		$data['count']=$this->product_model->total_products();
@@ -63,5 +65,15 @@ class Wecome extends CI_Controller {
 		$data['top']=$this->header->top();
 		$data['footer']=$this->footer->index();
 		$this->load->view('theme/default/template/wecome',$data);
+	}
+
+	public function check_modify(){
+		if(!$this->user->hasPermission('access', 'sale/wecome')){
+			$this->session->set_flashdata('fali', '你没有访问商户后台的权限！');
+			redirect(base_url(), 'location', 301);
+			exit;
+		}else{
+			return true;
+		}
 	}
 }

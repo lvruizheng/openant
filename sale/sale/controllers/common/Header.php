@@ -15,11 +15,13 @@ class Header extends CI_Common {
 		//写令牌
 		$this->tool_model->writer_token();
 		
+		/*
 		if(!$this->user->hasPermission('access', 'sale/wecome')){
 			$this->session->set_flashdata('fali', '你没有访问商家后台的权限！');
 			redirect(base_url(), 'location', 301);
 			exit;
 		}
+		 */
 	}
 
 	public function index()

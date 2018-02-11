@@ -79,7 +79,7 @@
 	<div class="form-group">
 		<div class="col-sm-offset-2 col-sm-10">
 			<?php if($this->input->get('address_id') != NULL):?>
-			<input type="hidden" name="address_id" value="<?php echo $this->input->get('address_id');?>"/>
+				<input type="hidden" name="address_id" value="<?php echo $this->input->get('address_id');?>"/>
 			<?php endif;?>
 			<button type="submit" class="btn btn-default">保存</button>
 		</div>

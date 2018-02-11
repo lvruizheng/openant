@@ -12,9 +12,14 @@ class Confirm extends MY_Controller{
 
 	public function index(){
 		$this->document->setTitle('确认订单');
-		
-		$this->document->addStyle(base_url('resources/public/resources/default/css/ystep/ystep.css'));
-		$this->document->addScript(base_url('resources/public/resources/default/js/ystep/ystep.js'));
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){	
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/base.css'));
+			$this->document->addStyle(base_url('resources/public/resources/mobile/css/module.css'));
+		}else{
+			$this->document->addStyle(base_url('resources/public/resources/default/css/ystep/ystep.css'));
+			$this->document->addScript(base_url('resources/public/resources/default/js/ystep/ystep.js'));
+		}
 		
 		$data['addresss']=$this->address_model->get_addresss($this->user->getId());
 		
@@ -29,7 +34,7 @@ class Confirm extends MY_Controller{
 		$carts=$this->cart_model->get_carts();
 		
 		if($carts){
-			$selected=$this->input->post('selected');
+			$selected=$this->input->get('selected');
 
 			foreach($carts as $key=>$value){
 				if(isset($carts[$key]['rowid']) && in_array($key, $selected)){
@@ -81,7 +86,10 @@ class Confirm extends MY_Controller{
 		$data['top']=$this->header->step_top();
 		$data['footer']=$this->footer->index();
 		
-		$this->load->view('theme/default/template/user/confirm',$data);
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+			$this->load->view('theme/default/template/user/m_confirm',$data);
+		else
+			$this->load->view('theme/default/template/user/confirm',$data);
 	}
 	
 	public function payment(){
@@ -145,7 +153,10 @@ class Confirm extends MY_Controller{
 		$data['top']=$this->header->step_top();
 		$data['footer']=$this->footer->index();
 		
-		$this->load->view('theme/default/template/user/payment',$data);
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+			$this->load->view('theme/default/template/user/m_payment',$data);
+		else
+			$this->load->view('theme/default/template/user/payment',$data);
 	}
 	
 	public function payment_operation(){
@@ -224,7 +235,7 @@ class Confirm extends MY_Controller{
 				exit;
 			}
 			
-			redirect($this->config->item('catalog').'extension/payment/'.$payment_method.'?encrypt='.$encrypt.'&order_ids='.$this->input->post('order_ids').'&payment_total='.$payment_total);
+			//redirect($this->config->item('catalog').'extension/payment/'.$payment_method.'?encrypt='.$encrypt.'&order_ids='.$this->input->post('order_ids').'&payment_total='.$payment_total);
 		}
 	}
 	
@@ -258,6 +269,7 @@ class Confirm extends MY_Controller{
 					$carts[$key]['image']=$product_info['image'];
 					$carts[$key]['store_id']=$product_info['store_id'];
 					$carts[$key]['name']=$carts[$key]['name'];
+					$carts[$key]['subtract'] = $product_info['subtract'];
 					
 					$taxs=$this->cart_model->get_tax_for_cart($product_info['tax_class_id']);
 					
@@ -390,8 +402,14 @@ class Confirm extends MY_Controller{
 							$products[$key][$k]['tax']='0';
 						}
 						
+						//删除购物车
 						$this->cart_model->delete($carts_product[$key]['products'][$k]['rowid']);
-						
+
+						//减少库存
+						if($v['subtract'] == 1){
+							$this->product_model->product_counter($v['id'],'quantity',$v['qty'],'-');	
+							$this->product_model->product_option_counter($v['id'],$v['option_value_id'],'quantity',$v['qty'],'-');
+						}	
 					}
 					unset($carts_product[$key]['products']);
 					if(isset($products[$key])){

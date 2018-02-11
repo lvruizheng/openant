@@ -51,7 +51,15 @@ class Signin extends CI_Controller {
 		
 		//验证提交
         if($this->valid_login() && $_SERVER['REQUEST_METHOD']=="POST"){
-			if($this->user->login($this->input->post('email'),$this->input->post('password'))){
+			$group_id_where = '';
+			if($this->input->post('group_id') != ''){
+				if($this->input->post('group_id') == 'admin'){
+					$group_id_where = " and user_group_id = 2";	
+				}else if($this->input->post('group_id') == 'sale'){
+					$group_id_where = " and (user_group_id = 2 or user_group_id = 3) ";	
+				}	
+			}
+			if($this->user->login($this->input->post('email'),$this->input->post('password'),$group_id_where)){
 				$this->session->set_flashdata('success', lang_line('success_login'));
 				//写入动态活动表
 				$this->user_activity_model->add_activity($_SESSION['user_id'], 'login', array('title'=>lang_line('success_login'), 'msg'=>''));
@@ -68,7 +76,15 @@ class Signin extends CI_Controller {
 				if($this->user_model->check_login_times($this->input->ip_address(), $this->input->post('email')) == FALSE){
 					if($load == TRUE){
 						$this->session->set_flashdata('fali', lang_line('error_times'));
-						redirect(all_current_url());
+						if($this->input->post('group_id') != ''){
+							if($this->input->post('group_id') == 'admin'){
+								redirect($this->config->item('admin').'user/signin/login?url='.rawurlencode($url));
+							}else if($this->input->post('group_id') == 'sale'){
+								redirect($this->config->item('sale').'user/signin/login?url='.rawurlencode($url));
+							}
+						}else{
+							redirect($this->config->item('catalog').'user/signin/login?url='.rawurlencode($url));
+						}
 					}else{
 						$this->output
 						    ->set_content_type('application/json')
@@ -77,7 +93,15 @@ class Signin extends CI_Controller {
 				}else{
 					if($load == TRUE){
 						$this->session->set_flashdata('fali', lang_line('error_or'));
-						redirect(all_current_url());
+						if($this->input->post('group_id') != ''){
+							if($this->input->post('group_id') == 'admin'){
+								redirect($this->config->item('admin').'user/signin/login?url='.rawurlencode($url));
+							}else if($this->input->post('group_id') == 'sale'){
+								redirect($this->config->item('sale').'user/signin/login?url='.rawurlencode($url));
+							}
+						}else{
+							redirect($this->config->item('catalog').'user/signin/login?url='.rawurlencode($url));
+						}
 					}else{
 						$this->output
 						    ->set_content_type('application/json')

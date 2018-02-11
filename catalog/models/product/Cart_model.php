@@ -25,7 +25,7 @@ class Cart_model extends CI_Model{
 			//$cart['qty']=$data[$key]['qty'];
 			//$cart['price']=$data[$key]['price'];
 			$cart['name']=$data[$key]['name'];
-			$cart['rowid']=md5($cart['id'].serialize($cart['options']).$_SESSION['cart_id']);
+			//$cart['rowid']=md5($cart['id'].serialize($cart['options']).$_SESSION['cart_id']);
 			$cart['points']=$data[$key]['points'];
 			
 			if(isset($data[$key]['preferential_type'])){
@@ -44,11 +44,13 @@ class Cart_model extends CI_Model{
 				$cart_info = $query->result_array();	
 				$this->db->where($cart);
 
-				$cart['qty'] = $cart_info[0]['qty'] + $data[$key]['qty'];
-				$cart['price'] = $cart_info[0]['price'] + $data[$key]['price'];
+				$updates['qty'] = $cart_info[0]['qty'] + $data[$key]['qty'];
+				$updates['price'] = $cart_info[0]['price'] + $data[$key]['price'];
 
-				$this->db->update($this->db->dbprefix('user_cart'), $cart);
+				$this->db->update($this->db->dbprefix('user_cart'), $updates);
+				$cart['rowid'] = $cart_info[0]['rowid'];
 			}else{
+				$cart['rowid']=md5($cart['id'].serialize($cart['options']).$_SESSION['cart_id']);
 				$cart['qty'] = $data[$key]['qty'];
 				$cart['price'] = $data[$key]['price'];
 				

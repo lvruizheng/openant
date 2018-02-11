@@ -120,7 +120,7 @@
 				});
 			//退出登陆
 			function logout(){
-				$.get("<?php echo $this->config->item('catalog');?>/user/signin/logout",function(){
+				$.get("<?php echo $this->config->item('sale');?>user/signin/logout",function(){
 					window.location.reload();
 				});
 			}

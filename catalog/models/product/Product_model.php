@@ -665,4 +665,19 @@ class Product_model extends CI_Model{
 		}
 		return $product;
 	}
+
+	//商品计数操作
+	public function product_counter($product_id,$field,$number,$oper='+'){
+		$this->db->where('product_id',$product_id);
+		$this->db->set($field,$field.$oper.$number,FALSE);
+		$this->db->update('product');	
+	}
+
+	//商品类别减库存
+	public function product_option_counter($product_id,$option_id,$field,$number,$oper='+'){
+		$this->db->where('product_id',$product_id);
+		$this->db->where('option_id',$option_id);
+		$this->db->set($field,$field.$oper.$number,FALSE);
+		$this->db->update('product_option_value');	
+	}
 }

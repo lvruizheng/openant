@@ -27,7 +27,7 @@
 					<?php if($carts_product):?>
 					<div class="panel panel-default">
 						<!-- Table -->
-						<form action="<?php echo $this->config->item('catalog').'user/confirm';?>" method="post" enctype="multipart/form-data" id="cart-form">
+						<form action="<?php echo $this->config->item('catalog').'user/confirm';?>" method="get" enctype="multipart/form-data" id="cart-form">
 						<table class="table table-striped">
 							<thead>
 								<tr>

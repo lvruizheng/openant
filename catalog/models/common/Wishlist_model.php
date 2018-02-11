@@ -15,6 +15,14 @@ class Wishlist_model extends CI_Model {
 			return 0;
 		}
 	}
+
+	public function get_wishinfo($product_id){
+		$this->db->where('user_id', $_SESSION['user_id']);
+		$this->db->where('product_id',$product_id);
+
+		return $this->db->count_all_results($this->db->dbprefix('user_wishlist'));
+	}
+
 	//
 	public function get_wishlist($data)
 	{
@@ -60,5 +68,9 @@ class Wishlist_model extends CI_Model {
 		}else{
 			return $this->db->insert($this->db->dbprefix('user_wishlist'), $data);
 		}
+	}
+
+	public function remove($product_id){
+		return $this->db->delete($this->db->dbprefix('user_wishlist'), array('product_id' => $product_id , 'user_id'=>$this->user->getId() ));
 	}
 }

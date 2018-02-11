@@ -190,7 +190,7 @@ class Extension extends MY_Controller{
 		$this->get_list ( 'payment' );
 	}
 	public function get_list($type = ''){
-		$maps = directory_map ( 'application/admin/controllers/extension_config/' . $type . '/', 1 );
+		$maps = directory_map ( 'admin/controllers/extension_config/' . $type . '/', 1 );
 		if(! empty ( $maps )){
 			$maps = $this->change_array ( $maps );
 			
@@ -215,7 +215,8 @@ class Extension extends MY_Controller{
 				$extensions [$key] ['name'] = $this->lang->line ( 'heading_title' );
 				$extensions [$key] ['code'] = $maps [$key];
 				// 插件设置
-				$extensions [$key] ['action'] = strtolower(site_url ( 'extension_config/' . $type . '/' . str_replace('_module', '', $maps [$key])));
+				//$extensions [$key] ['action'] = strtolower(site_url ( 'extension_config/' . $type . '/' . str_replace('_module', '', $maps [$key])));
+				$extensions [$key] ['action'] = $this->config->item('admin'). 'extension_config/' . $type . '/' . str_replace('_module', '', $maps [$key]);
 				
 				if(is_array ( $installed_extension )){
 					foreach( $installed_extension as $k => $v ){

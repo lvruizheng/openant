@@ -35,6 +35,13 @@
         paginationClickable: true,
         spaceBetween:2
       });
+
+	//退出登陆
+	function logout(){
+		$.get("<?php echo $this->config->item('catalog');?>/user/signin/logout",function(){
+			window.location.reload();
+		});
+	}
 </script>
 </body>
 </html>

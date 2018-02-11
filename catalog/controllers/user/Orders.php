@@ -7,7 +7,7 @@ class Orders extends MY_Controller {
 		parent::__construct();
 		$this->load->language('wecome');
 		$this->load->library(array('currency'));
-		$this->load->model(array('order/order_model'));
+		$this->load->model(array('order/order_model','product/product_model'));
 	}
 
 	public function index()
@@ -26,6 +26,9 @@ class Orders extends MY_Controller {
 			$data ['order_status'] = FALSE;
 		}
 		
+		if($data['order_status'] == $this->config->get_config('inbound_state')){
+			$data ['order_status'] = array($this->config->get_config('inbound_state'),$this->config->get_config('to_be_delivered'));
+		}
 		$orders=$this->order_model->get_orders($data);
 		
 		if ($orders) {
@@ -69,7 +72,16 @@ class Orders extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/orders',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			if($this->input->is_ajax_request()){
+				$this->load->view('theme/default/template/user/m_orders_list',$data);
+			}else{
+				$this->load->view('theme/default/template/user/m_orders',$data);
+			}	
+		}else{
+			$this->load->view('theme/default/template/user/orders',$data);
+		}
 	}
 	
 	//订单详情
@@ -78,7 +90,11 @@ class Orders extends MY_Controller {
 		$this->document->setTitle('订单详情');
 		
 		if($this->input->get('order_id') != NULL){
-			$data['orders']=$this->order_model->get_order($this->input->get('order_id'));
+			if($this->order_model->check_user_order($this->input->get('order_id')) != false){
+				$data['orders']=$this->order_model->get_order($this->input->get('order_id'));
+			}else{
+				$data['orders']=FALSE;
+			}
 		}else{
 			$data['orders']=FALSE;
 		}
@@ -91,7 +107,11 @@ class Orders extends MY_Controller {
 		$data['header']=$this->header->index();
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
-		$this->load->view('theme/default/template/user/order_info',$data);
+
+		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+			$this->load->view('theme/default/template/user/m_order_info',$data);
+		else
+			$this->load->view('theme/default/template/user/order_info',$data);
 	}
 	
 	public function del_order(){
@@ -112,4 +132,149 @@ class Orders extends MY_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($data));
 	}
+
+	//确认收货
+	public function edit_logistic(){
+		if($this->input->get('order_id') == '' || $this->order_model->check_user_order($this->input->get('order_id'),$this->config->get_config('inbound_state')) == false){
+			$resule['status']=FALSE;
+			$resule['msg']='数据错误！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('catalog').'user/orders');
+			exit;
+		}
+
+		$order_status = array(
+			0 => array_merge($this->input->get(),['order_status_id'=>$this->config->get_config('state_to_be_evaluated')])
+		);
+
+		$this->order_model->edit_order_status($order_status);
+
+		//计入销量
+		$pro_list = $this->order_model->get_order_products_list($this->input->get('order_id'));
+		if($pro_list){
+			foreach($pro_list as $value){
+				$this->product_model->product_counter($value['product_id'],'seal_quantity',$value['quantity']);
+			}
+		}
+		
+		$data['position_top']=$this->position_top->index();
+		$data['position_left']=$this->position_left->index();
+		$data['position_right']=$this->position_right->index();
+		$data['position_bottom']=$this->position_bottom->index();
+		
+		$data['header']=$this->header->index();
+		$data['top']=$this->header->user_top();
+		$data['footer']=$this->footer->index();
+
+		$this->load->view('theme/default/template/user/m_edit_logistic',$data);
+	}
+
+	//评价商品列表
+	public function product_review_list(){
+		if(empty($this->input->get('order_id') || $this->order_model->check_user_order($this->input->get('order_id'),$this->config->get_config('state_to_be_evaluated')) == false)){
+			$resule['status']=FALSE;
+			$resule['msg']='数据错误！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('catalog').'user/orders');
+			exit;
+		}else{
+			$data['order_id'] = $this->input->get('order_id');	
+		}
+
+		$data['orders'] = $this->order_model->get_order($this->input->get('order_id'));
+		$is_reviews = $this->order_model->check_order_review($this->input->get('order_id'));
+
+		foreach($data['orders']['products'] as &$value){
+			if(in_array($value['order_product_id'],$is_reviews['ids'])){
+				$value['is_review'] = true;
+			}else{
+				$value['is_review'] = false;
+			}
+		}
+
+		if($data['orders']['order_status_id'] != $this->config->get_config('state_to_be_evaluated')){
+			$resule['status']=FALSE;
+			$resule['msg']='数据错误！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('catalog').'user/orders');
+			exit;
+		}
+
+		$data['position_top']=$this->position_top->index();
+		$data['position_left']=$this->position_left->index();
+		$data['position_right']=$this->position_right->index();
+		$data['position_bottom']=$this->position_bottom->index();
+		
+		$data['header']=$this->header->index();
+		$data['top']=$this->header->user_top();
+		$data['footer']=$this->footer->index();
+
+		$this->load->view('theme/default/template/user/m_product_review_list',$data);
+	}
+
+	//评论
+	public function product_review(){
+		if(empty($this->input->get('order_id') || $this->order_model->check_user_order($this->input->get('order_id'),$this->config->get_config('state_to_be_evaluated')) == false)){
+			$resule['status']=FALSE;
+			$resule['msg']='数据错误！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('catalog').'user/orders');
+			exit;
+		}else{
+			$data['order_id'] = $this->input->get('order_id');	
+			$data['product_id'] = $this->input->get('product_id');	
+			$data['order_product_id'] = $this->input->get('order_product_id');
+		}
+
+		$data['position_top']=$this->position_top->index();
+		$data['position_left']=$this->position_left->index();
+		$data['position_right']=$this->position_right->index();
+		$data['position_bottom']=$this->position_bottom->index();
+		
+		$data['header']=$this->header->index();
+		$data['top']=$this->header->user_top();
+		$data['footer']=$this->footer->index();
+
+		$this->load->view('theme/default/template/user/m_product_review',$data);
+	}
+
+	//提交评论
+	public function add_pro_review(){
+		if(empty($this->input->post('order_id') || $this->order_model->check_user_order($this->input->post('order_id'),$this->config->get_config('state_to_be_evaluated')) == false)){
+			$resule['status']=FALSE;
+			$resule['msg']='数据错误！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('catalog').'user/orders');
+			exit;
+		}else{
+			$data = $this->input->post();
+			$data['user_id'] = $this->user->getId(); 
+			$data['date_added'] = date('Y-m-d H:i:s',time());
+			$data['author'] = $this->user->getNickname();
+			if($this->order_model->add_product_review($data)){
+				//计入评论数
+				$this->product_model->product_counter($this->input->post('product_id'),'reviews_quantity',1);
+
+				//检查是否全部评论完成
+				$return_is = $this->order_model->check_order_review($this->input->post('order_id'));
+				if($return_is['is_review'] == true){
+					$order_status = array(
+						0 => array(
+							'order_id' => $this->input->post('order_id'),
+							'order_status_id'=>$this->config->get_config('order_completion_status')
+						)
+					);	
+					$this->order_model->edit_order_status($order_status);
+				}
+			}
+			
+			redirect($this->config->item('catalog').'user/orders');
+		}
+	}
+	
 }

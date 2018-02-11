@@ -80,11 +80,11 @@ class CI_User {
 		}
 	}
 
-	public function login($email, $password, $override = false) {
+	public function login($email, $password,$group_id_where='', $override = false) {
 		if ($override) {
-			$user_query = $this->CI->db->query("SELECT * FROM " . $this->db->dbprefix('user') . " WHERE LOWER(email) = '" . $this->CI->db->escape($email) . "' AND status = '1'");
+			$user_query = $this->CI->db->query("SELECT * FROM " . $this->db->dbprefix('user') . " WHERE LOWER(email) = '" . $this->CI->db->escape($email) . "' AND status = '1'".$group_id_where);
 		} else {
-			$user_query = $this->CI->db->query("SELECT * FROM " . $this->CI->db->dbprefix('user') . " WHERE LOWER(email) = " . $this->CI->db->escape($email) . " AND password = " . $this->CI->db->escape(md5($password)) . " AND status = '1'");
+			$user_query = $this->CI->db->query("SELECT * FROM " . $this->CI->db->dbprefix('user') . " WHERE LOWER(email) = " . $this->CI->db->escape($email) . " AND password = " . $this->CI->db->escape(md5($password)) . " AND status = '1'".$group_id_where);
 		}
 
 		if ($user_query->row_array()) {

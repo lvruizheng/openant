@@ -31,9 +31,9 @@
 		echo 'on_desc';
 	}else if($order_by == 'price_asc'){
 		echo 'on_asc';
-	}else{
-		echo 'off';
 	}
+}else{
+	echo 'off';
 } ?>">按价格</div></div>
     </div>
   </div>
@@ -72,9 +72,9 @@
 
   </div>
 
-	  <div class="weui-loadmore" style="<?php if(count($products) < $this->config->get_config('config_limit_catalog')) echo 'display:none;'; ?>">
+  <div class="weui-loadmore" style="<?php if(count($products) < $this->config->get_config('config_limit_catalog')) echo 'display:none;'; ?>">
     <i class="weui-loading"></i>
-    <span class="weui-loadmore__tips">加载更多</span>
+    <span class="weui-loadmore__tips">下拉加载更多</span>
   </div>
  
   
@@ -104,7 +104,6 @@
 	  }
 
 	  var switchs = 1;
-
       var hDpi = $(window).height();
       var loadH = $('.weui-loadmore').height() + 27;
 
@@ -115,7 +114,9 @@
 			if(switchs == 1){
 			  switchs = 0;	
 
-	  var data = {comefrom:'scroll',page:page,};
+			  data.comefrom = 'scroll';
+			  data.page = page;
+
 			  $.ajax({
 				  url: '/product/category',
 				  data: data,
@@ -124,6 +125,7 @@
 				  success:function(obj){
 						if(obj == false){
 							$(".weui-loadmore__tips").text('没有更多了');
+							$(".weui-loading").hide();
 						}else{
 							page += parseInt("<?php echo $this->config->get_config('config_limit_catalog'); ?>");
 					 

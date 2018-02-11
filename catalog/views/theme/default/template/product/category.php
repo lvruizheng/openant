@@ -19,7 +19,7 @@
 			<div class="well well-sm">
 				<h6>热门搜索关键词</h6><hr>
 				<?php foreach ($search_key_words as $key_word):?>
-				<a style="margin-bottom: 15px;display:inline-block" class="label label-<?php echo $label[array_rand($label)];?>" href="<?php echo $this->config->item('catalog').'product/category?search='.$key_word['key_word'];?>"><?php echo $key_word['key_word'];?></a>
+					<a style="margin-bottom: 15px;display:inline-block" class="label label-<?php echo $label[array_rand($label)];?>" href="<?php echo $this->config->item('catalog').'product/category?search='.$key_word['key_word'];?>"><?php echo $key_word['key_word'];?></a>
 				<?php endforeach;?>
 			</div>
 			<?php endif;?>

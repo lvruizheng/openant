@@ -9,6 +9,10 @@ li .active{display:inline-block; border:1px dashed #f00;}
 #show-toast.cur .weui-tabbar__label{
 	color: #f00;
 }
+.error_order{border:1px dashed #f00;}
+.weui-msg__opr-area .weui-btn.disabled{
+	background: #96e895;
+}
 </style>
 
 <div class="weui-content">
@@ -56,7 +60,7 @@ li .active{display:inline-block; border:1px dashed #f00;}
 				}
 			?>
           <h4 class="wy-media-box__title"><?php echo $product['name'];?></h4>
-          <div class="wy-pro-pri mg-tb-5"><em class="num font-20"><?php echo $this->currency->Compute($product['price']);?></em></div>
+          <div class="wy-pro-pri mg-tb-5"><em class="num font-20" id="default_price"><?php echo $this->currency->Compute($product['price']);?></em></div>
           <p class="weui-media-box__desc"><?php echo $product['meta_description'];?></p>
         </div>
         <!--div class="wy-media-box2 weui-media-box_text">
@@ -75,16 +79,16 @@ li .active{display:inline-block; border:1px dashed #f00;}
             </div>
           </div>
         </div-->
-        <div class="wy-media-box2 weui-media-box_text">
+        <div class="wy-media-box2 weui-media-box_text ">
 
 			<?php foreach($product['options'] as $key=>$val):?>
 				<div class="weui-media-box_appmsg">
 					<div class="weui-media-box__hd proinfo-txt-l"><span class="promotion-label-tit"><?php echo $val['option_group_name'];?></span></div>
 					<div class="weui-media-box__bd">
 					  <div class="promotion-sku clear">
-						<ul>
+						<ul class="out_option_ul_<?php echo $key ?>" ul_id="<?php echo $key ?>">
 							<?php foreach($val['options'] as $k=>$v):?>
-								<li class="<?php echo $k==0?'active':'' ?>" option_id="<?php echo $v['option_id']; ?>"><a href="javascript:;"><?php echo $v['name']; ?></a></li>
+								<li class="out_option_li_<?php echo $v['option_id']; ?>" onclick="select_type(this)" taxs="<?php echo isset($product['taxs']) ? $product['taxs']['type'].'+.+'.$product['taxs']['rate'] : '';?>" group_id="<?php echo $val['option_group_id'];?>" option_id="<?php echo $v['option_id']; ?>"><a href="javascript:;"><?php echo $v['name']; ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					  </div>
@@ -173,14 +177,14 @@ li .active{display:inline-block; border:1px dashed #f00;}
     <div class="weui-tabbar__icon promotion-foot-menu-kefu"></div>
     <p class="weui-tabbar__label">店铺</p>
   </a>
-  <a href="javascript:;" id='show-toast' class="promotion-foot-menu-items">
+  <a href="javascript:;" id='show-toast' class="promotion-foot-menu-items <?php echo $iswish?'cur':'' ?>">
     <div class="weui-tabbar__icon promotion-foot-menu-collection"></div>
-    <p class="weui-tabbar__label">收藏</p>
+    <p class="weui-tabbar__label"><?php echo $iswish?'已收藏':'收藏' ?></p>
   </a>
-  <a href="shopcart.html" class="promotion-foot-menu-items">
-    <span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">8</span>
+  <a href="<?php echo $this->config->item('catalog').'user/cart';?>" class="promotion-foot-menu-items">
+    <?php echo ($carts !== FALSE && is_array($carts)) ? '<span class="weui-badge" style="position: absolute;top: -.4em;right: 1em;">'.$carts['total_items'].'</span>' :'';?>
     <div class="weui-tabbar__icon promotion-foot-menu-cart"></div>
-    <p class="weui-tabbar__label">购物车</p>
+    <p class="weui-tabbar__label"><?php echo lang_line('cart');?></p>
   </a>
   <a href="javascript:;" class="weui-tabbar__item yellow-color open-popup" data-target="#selcet_sku">
     <p class="promotion-foot-menu-label">加入购物车</p>
@@ -199,29 +203,32 @@ li .active{display:inline-block; border:1px dashed #f00;}
     </div>
     <div class="modal-content">
       <div class="weui-msg" style="padding-top:0;">	
-		<div class="wy-media-box2 weui-media-box_text" id="product-options" style="margin:0;">
+		<div class="wy-media-box2 weui-media-box_text " id="product-options" style="margin:0;">
 		   	
 			<?php foreach($product['options'] as $key=>$val):?>
 				<div class="weui-media-box_appmsg">
 					<div class="weui-media-box__hd proinfo-txt-l"><span class="promotion-label-tit"><?php echo $val['option_group_name'];?></span></div>
 					<div class="weui-media-box__bd">
 					  <div class="promotion-sku clear">
-						<ul>
+						<ul class="in_option_ul_<?php echo $key ?>" ul_id="<?php echo $key ?>">
 							<?php foreach($val['options'] as $k=>$v):?>
-								<li class="<?php echo $k==0?'active':'' ?>" option_id="<?php echo $v['option_id']; ?>"><a href="javascript:;"><?php echo $v['name']; ?></a></li>
+								<li class="in_option_li_<?php echo $v['option_id']; ?>" onclick="select_type(this)" taxs="<?php echo isset($product['taxs']) ? $product['taxs']['type'].'+.+'.$product['taxs']['rate'] : '';?>" group_id="<?php echo $val['option_group_id'];?>" option_id="<?php echo $v['option_id']; ?>"><a href="javascript:;"><?php echo $v['name']; ?></a></li>
 							<?php endforeach; ?>
 						</ul>
 					  </div>
 					</div>
 				</div>
 			<?php endforeach;?>
-	
-		<div class="pro-amount fr"><div class="Spinner"></div></div> 
+
+		<div class="col-md-3 quantity" style="padding: 10px 0;"><?php echo lang_line('in_stock');?><a class="number"><?php echo $product['quantity'];?></a></div>
+
+		<div class="pro-amount fr"><div class="Spinner"></div></div>
+
 		</div>
 
 		<div class="weui-msg__opr-area">
           <p class="weui-btn-area">
-            <a href="javascript:;" class="weui-btn weui-btn_primary" id="add_cart_confirm">确认</a>
+            <button type="button" class="weui-btn weui-btn_primary" id="add_cart_confirm">确认</button>
           </p>
         </div>
       </div>
@@ -239,6 +246,56 @@ li .active{display:inline-block; border:1px dashed #f00;}
         autoplay:5000
 	});
 
+	//选择选项
+	function select_type(o){
+		//console.log(o);
+		var ul_id = $(o).parent().attr('ul_id');
+		var li_id = $(o).attr('option_id');	
+		var taxs = $(o).attr('taxs');
+		var group_id = $(o).attr('group_id');
+
+		if($(o).hasClass('active')){
+			return;
+		}else{
+			//取消错误边框
+			$('.wy-media-box2').removeClass('error_order');
+
+			$(".out_option_ul_"+ul_id+" .active").removeClass('active');
+			$(".in_option_ul_"+ul_id+" .active").removeClass('active');
+	
+			//$(o).attr('class','active');
+			$(".out_option_li_"+li_id).addClass('active');
+			$(".in_option_li_"+li_id).addClass('active');
+
+			//拼装数组
+			var re=is_select_all(group_id, li_id);
+
+			var options=new Array();
+			$("#product-options .active").each(function(index, element){
+				options[index]=$(this).attr('option_id');
+			});
+
+			var options_count = <?php echo count($product['options']); ?>;
+			if(options.length == options_count){
+				if(re !== false){
+					option(re, taxs);
+				}
+			}
+		}
+	}
+
+	//组装数组
+	var arrays=new Array();
+	function is_select_all(group_id, cl){
+		<?php if(isset($product['options'])):?>
+			arrays[group_id]=new Array();
+			arrays[group_id][1]=cl;
+		
+			return arrays;	
+		<?php endif;?>
+	}
+
+	//收藏
 	$(document).on("click", "#show-toast", function() {
 		<?php if($this->user->isLogged()):?>
 			if($('#show-toast').hasClass('cur')){
@@ -298,6 +355,11 @@ li .active{display:inline-block; border:1px dashed #f00;}
 			options[index]=$(this).attr('option_id');
 		});
 
+		var options_count = <?php echo count($product['options']); ?>;
+		if(options.length < options_count){
+			$('.wy-media-box2').addClass('error_order');
+			return;
+		}
 		var qty = $('.Spinner input').val();
 		var product_id='<?php echo $product_id;?>';
 		var name='<?php echo $product['name'];?>';
@@ -317,11 +379,57 @@ li .active{display:inline-block; border:1px dashed #f00;}
 			data: {option_id:options, qtys:qty, product_ids:productid, names:name},	
 			success: function(data){
 				if(data.success){
-					console.log(data);
+					//console.log(data);
+					$(".weui-popup__container").click();
+
+					setTimeout(function (){
+						$('.weui-badge').text(parseInt($('.weui-badge').text())+parseInt(qty))
+					},1000);
 				}else{
 					//$.notify({message: data.error },{type: 'warning',offset: {x: 0,y: 52}});
 				}
 		
+			},
+			error: function(xhr, ajaxOptions, thrownError)
+			{
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	//远程请求价格数据
+	function option(a, taxs){
+		$.ajax({
+			url: '<?php echo $this->config->item('catalog').'product/option?product_id='.$this->input->get('product_id');?>',
+			type: 'post',
+			dataType: 'json',
+			data: {arr:a, taxs:taxs},	
+			success: function(data){
+				if(data.sale == 'fail'){
+					$('.Spinner input').attr("disabled","disabled").val('0');
+					$('.Spinner a').unbind('click');
+					$('.weui-msg__opr-area .weui-btn').attr("disabled","disabled").addClass('disabled');
+					$('.weui-msg__opr-area .weui-btn').attr("title","<?php echo lang_line('no_stock');?>");
+				}else{
+					$('.Spinner input').removeAttr("disabled").val('1');
+					$(".Spinner").empty();
+					$(".Spinner").Spinner({value:1, len:3, max:999});
+					$('.weui-msg__opr-area .weui-btn').removeAttr("disabled").removeClass('disabled');
+				}
+		
+				$('#default_price').html(data.default_price);			//单价
+				/*if(data.type == 'discount'){
+					$('.preferential').text("<?php echo lang_line('discount');?>"+data.value);
+				}
+				if(data.type == 'special'){
+					$('.preferential').text("<?php echo lang_line('member_relief');?>"+data.value);
+				}*/
+				
+				$('.quantity a').text(data.quantity);					//库存
+				$('#Spinner input').attr("data-max",data.quantity);
+				//$("#product-price span[class='aprice']").html(data.price);
+				//$(".points_awarded").text(data.points);				//赠送积分
+				//$(".cart_price").text(data.cart_price);				//购物车单价
 			},
 			error: function(xhr, ajaxOptions, thrownError)
 			{

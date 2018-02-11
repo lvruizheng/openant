@@ -47,7 +47,7 @@ class Order_model extends CI_Model {
 	}
 	
 public function get_order($order_id){
-		$this->db->select('o.order_id, o.invoice_no, o.invoice_prefix, o.store_id, o.user_id, o.firstname, o.lastname, o.email, o.telephone, o.payment_firstname, o.payment_lastname, o.payment_address, o.payment_city, o.payment_postcode, o.payment_country, o.payment_country_id, o.payment_zone, o.payment_zone_id, o.payment_address_format, o.payment_method, o.payment_code, o.shipping_firstname, o.shipping_lastname, o.shipping_address, o.shipping_city, o.shipping_postcode, o.shipping_country, o.shipping_country_id, o.shipping_zone, o.shipping_zone_id, o.shipping_address_format, o.shipping_method, o.shipping_code, o.comment, o.total, o.order_status_id, o.language_id, o.currency_id, o.currency_code, o.currency_value, o.date_added, sd.store_name, sd.description, sd.logo, osd.status_name, osd.order_status_id, u.firstname AS u_firstname, u.lastname AS u_lastname, u.nickname AS u_nickname, u.email AS u_email, u.telephone AS u_telephone');
+		$this->db->select('o.order_id, o.logistic, o.invoice_no, o.invoice_prefix, o.store_id, o.user_id, o.firstname, o.lastname, o.email, o.telephone, o.payment_firstname, o.payment_lastname, o.payment_address, o.payment_city, o.payment_postcode, o.payment_country, o.payment_country_id, o.payment_zone, o.payment_zone_id, o.payment_address_format, o.payment_method, o.payment_code, o.shipping_firstname, o.shipping_lastname, o.shipping_address, o.shipping_city, o.shipping_postcode, o.shipping_country, o.shipping_country_id, o.shipping_zone, o.shipping_zone_id, o.shipping_address_format, o.shipping_method, o.shipping_code, o.comment, o.total, o.order_status_id, o.language_id, o.currency_id, o.currency_code, o.currency_value, o.date_added, sd.store_name, sd.description, sd.logo, osd.status_name, osd.order_status_id, u.firstname AS u_firstname, u.lastname AS u_lastname, u.nickname AS u_nickname, u.email AS u_email, u.telephone AS u_telephone');
 		$this->db->where('o.order_id', $order_id);
 		$this->db->join('store AS s', 's.store_id = o.store_id');
 		$this->db->join('user AS u', 'u.store_id = o.store_id');
@@ -302,5 +302,10 @@ public function get_order($order_id){
 		}else{
 			return $this->db->insert($this->db->dbprefix('order_callout'), $data);
 		}
+	}
+
+	//修改订单状态
+	public function edit_order_status($data){
+		$this->db->update_batch('order', $data, 'order_id');
 	}
 }

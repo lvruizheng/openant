@@ -124,4 +124,28 @@ class Orders extends MY_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($data));
 	}
+
+	//发货
+	public function edit_logistic(){
+		if (!$this->user->hasPermission('modify', 'sale/order/orders')) {
+			$data['error'] = '没有权限修改';
+		}
+
+		if($this->input->post('order_id') == '' || $this->input->post('logistic') == ''){
+			$resule['status']=FALSE;
+			$resule['msg']='发货失败！';
+			$this->session->set_flashdata('result', $resule);
+				
+			redirect($this->config->item('sale').'order/orders');
+			exit;	
+		}
+
+		$order_status = array(
+			0 => array_merge($this->input->post(),['order_status_id'=>$this->config->get_config('inbound_state')])
+		);
+
+		$this->order_model->edit_order_status($order_status);
+
+		redirect($this->config->item('sale').'order/orders');
+	}
 }

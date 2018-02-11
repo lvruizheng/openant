@@ -26,7 +26,60 @@ class Order_model extends CI_Model {
 	public function edit_order_status($data){
 		$this->db->update_batch('order', $data, 'order_id');
 	}
-	
+
+	//验证用户和订单
+	public function check_user_order($order_id,$status=''){
+		$this->db->where('order_id',$order_id);
+		$this->db->where('user_id', $this->user->getId());
+		$this->db->from($this->db->dbprefix('order'));
+		if($status){
+			$this->db->where('order_status_id', $status);
+		}
+		$query = $this->db->get();
+		if($query->num_rows() > 0){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	//验证订单是否全部评论完毕
+	public function check_order_review($order_id){
+		$this->db->select('product_id,order_product_id');
+		$this->db->where('order_id',$order_id);
+		$this->db->from($this->db->dbprefix('order_product'));
+		$query = $this->db->get();
+
+		$return['is_review'] = true;
+		if($query->num_rows() > 0){
+			foreach($query->result_array() as $value){
+				$this->db->select('order_product_id');
+				$this->db->where('product_id',$value['product_id']);
+				$this->db->where('order_product_id',$value['order_product_id']);
+				$this->db->where('order_id',$order_id);
+				$this->db->where('user_id',$this->user->getId());
+				$this->db->from($this->db->dbprefix('product_review'));
+				$query = $this->db->get();
+
+				if($query->num_rows() > 0){
+					$return['ids'][] = $query->row_array()['order_product_id'];
+				}else{
+					$return['is_review'] = false;
+				}
+			}
+		}
+		return $return;
+	}
+
+	//商品评价
+	public function add_product_review($data){
+		if($this->db->insert($this->db->dbprefix('product_review'), $data)){
+			return TRUE;
+		}else{
+			return FALSE;
+		}	
+	}
+
 	//
 	public function get_orders($data=array())
 	{
@@ -34,7 +87,11 @@ class Order_model extends CI_Model {
 		
 		//统计表记录
 		if($data['order_status']){
-			$this->db->where('order_status_id', $data['order_status']);
+			if(is_array($data['order_status'])){
+				$this->db->where_in('order.order_status_id', $data['order_status']);
+			}else{
+				$this->db->where('order.order_status_id', $data['order_status']);
+			}
 		}
 		$this->db->where('user_id', $this->user->getId());
 		$orders['count']=$this->db->count_all_results($this->db->dbprefix('order'));
@@ -64,7 +121,7 @@ class Order_model extends CI_Model {
 	}
 	
 	public function get_order($order_id){
-		$this->db->select('o.order_id, o.invoice_no, o.invoice_prefix, o.store_id, o.user_id, o.firstname, o.lastname, o.email, o.telephone, o.payment_firstname, o.payment_lastname, o.payment_address, o.payment_city, o.payment_postcode, o.payment_country, o.payment_country_id, o.payment_zone, o.payment_zone_id, o.payment_address_format, o.payment_method, o.payment_code, o.shipping_firstname, o.shipping_lastname, o.shipping_address, o.shipping_city, o.shipping_postcode, o.shipping_country, o.shipping_country_id, o.shipping_zone, o.shipping_zone_id, o.shipping_address_format, o.shipping_method, o.shipping_code, o.comment, o.total, o.order_status_id, o.language_id, o.currency_id, o.currency_code, o.currency_value, o.date_added, sd.store_name, sd.description, sd.logo, osd.status_name, osd.order_status_id, u.firstname AS u_firstname, u.lastname AS u_lastname, u.nickname AS u_nickname, u.email AS u_email, u.telephone AS u_telephone');
+		$this->db->select('o.order_id, o.logistic, o.invoice_no, o.invoice_prefix, o.store_id, o.user_id, o.firstname, o.lastname, o.email, o.telephone, o.payment_firstname, o.payment_lastname, o.payment_address, o.payment_city, o.payment_postcode, o.payment_country, o.payment_country_id, o.payment_zone, o.payment_zone_id, o.payment_address_format, o.payment_method, o.payment_code, o.shipping_firstname, o.shipping_lastname, o.shipping_address, o.shipping_city, o.shipping_postcode, o.shipping_country, o.shipping_country_id, o.shipping_zone, o.shipping_zone_id, o.shipping_address_format, o.shipping_method, o.shipping_code, o.comment, o.total, o.order_status_id, o.language_id, o.currency_id, o.currency_code, o.currency_value, o.date_added, sd.store_name, sd.description, sd.logo, osd.status_name, osd.order_status_id, u.firstname AS u_firstname, u.lastname AS u_lastname, u.nickname AS u_nickname, u.email AS u_email, u.telephone AS u_telephone');
 		$this->db->where('o.order_id', $order_id);
 		$this->db->join('store AS s', 's.store_id = o.store_id');
 		$this->db->join('user as u', 'u.store_id = o.store_id');
@@ -277,6 +334,20 @@ class Order_model extends CI_Model {
 		}
 		
 		return FALSE;
+	}
+
+	//返回订单所有商品
+	public function get_order_products_list($order_id){
+		$this->db->where('order_id',$order_id);
+		$this->db->from($this->db->dbprefix('order_product'));
+		$query = $this->db->get();
+
+		if($query->num_rows() > 0){
+			$row=$query->result_array();
+			
+			return $row;
+		}
+		return false;
 	}
 	
 	public function get_orders_to_payment($order_ids){
