@@ -13,7 +13,7 @@ class Cart extends MY_Controller{
 
 	public function index(){
 		$this->document->setTitle('购物车');
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){	
+		if($this->config->get_config('view_type') == 1){	
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/base.css'));
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/module.css'));
 		}else{
@@ -71,7 +71,7 @@ class Cart extends MY_Controller{
 		$data['footer_nav']=$this->footer->footer_nav('cart');
 		$data['footer']=$this->footer->index();
 		
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+		if($this->config->get_config('view_type') == 1)	
 			$this->load->view('theme/default/template/user/m_cart',$data);
 		else
 			$this->load->view('theme/default/template/user/cart',$data);

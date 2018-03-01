@@ -25,7 +25,7 @@ class Header extends CI_Common {
 			$data['title']=unserialize($this->config->get_config('site_abbreviation'))[$_SESSION['language_id']];
 		}
 		
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+		if($this->config->get_config('view_type') == 1){
 			$this->document->addStyle(base_url('resources/public/resources/mobile/lib/weui.min.css'));
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/jquery-weui.css'));
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/style.css'));
@@ -49,7 +49,7 @@ class Header extends CI_Common {
 		$data['action_search']=$this->input->get('search');
 		
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+		if($this->config->get_config('view_type') == 1){
 			return $this->load->view('theme/default/template/mobile/m_header',$data,TRUE);
 		}else{
 			return $this->load->view('theme/default/template/common/header',$data,TRUE);

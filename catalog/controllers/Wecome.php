@@ -24,7 +24,7 @@ class Wecome extends CI_Controller {
 		$data['footer_nav']=$this->footer->footer_nav('index');
 		$data['footer']=$this->footer->index();
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)
+		if($this->config->get_config('view_type') == 1)
 			$this->load->view('theme/default/template/m_wecome',$data);
 		else
 			$this->load->view('theme/default/template/wecome',$data);

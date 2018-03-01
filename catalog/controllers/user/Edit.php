@@ -57,7 +57,7 @@ class Edit extends MY_Controller {
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+		if($this->config->get_config('view_type') == 1)		
 			$this->load->view('theme/default/template/user/m_edit_paswd',$data);
 		else
 			$this->load->view('theme/default/template/user/edit_paswd',$data);
@@ -110,7 +110,7 @@ class Edit extends MY_Controller {
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+		if($this->config->get_config('view_type') == 1)		
 			$this->load->view('theme/default/template/user/m_edit_user_info',$data);
 		else
 			$this->load->view('theme/default/template/user/edit_user_info',$data);
@@ -206,7 +206,7 @@ class Edit extends MY_Controller {
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+		if($this->config->get_config('view_type') == 1)		
 			$this->load->view('theme/default/template/user/m_edit_pay_password',$data);
 		else
 			$this->load->view('theme/default/template/user/edit_pay_password',$data);

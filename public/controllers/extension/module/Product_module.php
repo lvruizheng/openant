@@ -39,7 +39,7 @@ class Product_module extends CI_Extension{
 			$html =false;
 				
 			
-			if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+			if($this->config->get_config('view_type') == 1){
 				if($position == 'left' || $position == 'right'){
 					$html = $this->load->view('theme/default/template/extension/module/m_product_left_right_module', $data, TRUE);
 				}

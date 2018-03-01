@@ -36,7 +36,7 @@ class position_bottom extends CI_Common{
 			}
 		}
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+		if($this->config->get_config('view_type') == 1){
 			$this->html=$this->load->view('theme/default/template/common/m_position_bottom', $data, true);
 		}else{
 			$this->html=$this->load->view('theme/default/template/common/position_bottom', $data, true);	

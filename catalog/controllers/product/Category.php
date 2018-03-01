@@ -146,7 +146,7 @@ class Category extends CI_Controller {
 
 		$data['id'] = $this->input->get('id');
 		
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){
+		if($this->config->get_config('view_type') == 1){
 			if($this->input->get('comefrom') != null && $this->input->get('comefrom') == 'scroll'){
 				if($data['products']){
 					return $this->load->view('theme/default/template/product/m_category_list',$data);

@@ -110,7 +110,7 @@ class Wecome extends MY_Controller {
 		$data['footer']=$this->footer->index();
 
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)		
+		if($this->config->get_config('view_type') == 1)		
 			$this->load->view('theme/default/template/user/m_wecome',$data);
 		else
 			$this->load->view('theme/default/template/user/wecome',$data);

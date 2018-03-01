@@ -63,7 +63,7 @@ class Wishlist extends MY_Controller {
 		$data['top']=$this->header->user_top();
 		$data['footer']=$this->footer->index();
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){		
+		if($this->config->get_config('view_type') == 1){		
 			if($this->input->is_ajax_request()){
 				$this->load->view('theme/default/template/user/m_wishlist_list',$data);
 			}else{

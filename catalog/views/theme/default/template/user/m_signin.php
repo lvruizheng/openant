@@ -23,12 +23,12 @@ body{background:#323542;}
                 <input type="password" name="password" value="" placeholder="<?php echo lang_line('password');?>" />        
             </div>
             <a href="javascript:;" onclick="$('#signin').submit();" class="login-btn common-div"><?php echo lang_line('login');?></a>
-            <a href="javascript:;" class="login-oth-btn common-div">微信登陆</a>
-            <a href="javascript:;" class="login-oth-btn common-div">QQ登陆</a>
+            <!--a href="javascript:;" class="login-oth-btn common-div">微信登陆</a>
+            <a href="javascript:;" class="login-oth-btn common-div">QQ登陆</a-->
         </form>
     </div>
     <div class="forgets">
-    	<a href="/user/forget"><?php echo lang_line('forget');?></a>
+    	<!--a href="/user/forget"><?php echo lang_line('forget');?></a-->
         <a href="/user/signin/signinup">免费注册</a>
     </div>
 </div>

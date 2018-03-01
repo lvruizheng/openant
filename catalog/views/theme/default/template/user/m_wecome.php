@@ -74,19 +74,19 @@
     <div class="weui-panel__bd">
       <div class="weui-flex">
         <div class="weui-flex__item">
-          <a href="myburse.html" class="center-ordersModule">
+          <a href="javascript:;" class="center-ordersModule">
             <div class="center-money"><em><?php echo $this->currency->Compute($balances);?></em></div>
             <div class="name">账户总额</div>
           </a>
         </div>
         <div class="weui-flex__item">
-          <a href="myburse.html" class="center-ordersModule">
+          <a href="javascript:;" class="center-ordersModule">
 				<div class="center-money"><em><?php echo $integral; ?></em></div>
 				<div class="name">积分</div>
           </a>
         </div>
         <div class="weui-flex__item">
-          <a href="myburse.html" class="center-ordersModule">
+          <a href="javascript:;" class="center-ordersModule">
             <div class="center-money"><em>无</em></div>
             <div class="name">优惠券</div>
           </a>

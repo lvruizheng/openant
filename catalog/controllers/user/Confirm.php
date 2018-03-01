@@ -13,7 +13,7 @@ class Confirm extends MY_Controller{
 	public function index(){
 		$this->document->setTitle('确认订单');
 
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1){	
+		if($this->config->get_config('view_type') == 1){	
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/base.css'));
 			$this->document->addStyle(base_url('resources/public/resources/mobile/css/module.css'));
 		}else{
@@ -86,7 +86,7 @@ class Confirm extends MY_Controller{
 		$data['top']=$this->header->step_top();
 		$data['footer']=$this->footer->index();
 		
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+		if($this->config->get_config('view_type') == 1)	
 			$this->load->view('theme/default/template/user/m_confirm',$data);
 		else
 			$this->load->view('theme/default/template/user/confirm',$data);
@@ -153,7 +153,7 @@ class Confirm extends MY_Controller{
 		$data['top']=$this->header->step_top();
 		$data['footer']=$this->footer->index();
 		
-		if($this->agent->is_mobile() && $this->config->get_config('view_type') == 1)	
+		if($this->config->get_config('view_type') == 1)	
 			$this->load->view('theme/default/template/user/m_payment',$data);
 		else
 			$this->load->view('theme/default/template/user/payment',$data);
