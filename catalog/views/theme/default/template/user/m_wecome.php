@@ -81,7 +81,7 @@
         </div>
         <div class="weui-flex__item">
           <a href="javascript:;" class="center-ordersModule">
-				<div class="center-money"><em><?php echo $integral?$integeal:"0"; ?></em></div>
+				<div class="center-money"><em><?php echo $integral?"0":"0"; ?></em></div>
 				<div class="name">积分</div>
           </a>
         </div>
