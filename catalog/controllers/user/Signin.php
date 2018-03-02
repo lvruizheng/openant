@@ -185,7 +185,7 @@ class Signin extends CI_Controller {
 			$this->form_validation->set_rules('email', 'Email', 'required|valid_email');
 	        $this->form_validation->set_rules('password', 'Password', 'required|min_length[6]|max_length[18]');
 	        $this->form_validation->set_rules('nickname', 'nickname', 'required|min_length[3]|max_length[18]');
-	        
+
 	        if($this->form_validation->run() && preg_match("/^[\x{4e00}-\x{9fa5}A-Za-z0-9_]+$/u", $this->input->post('nickname')) && $this->input->post('agree') == '1' && $this->check_email($this->input->post('email'))){
 	        	
 	        	//
