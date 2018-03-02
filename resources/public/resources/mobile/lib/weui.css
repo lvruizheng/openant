@@ -368,8 +368,8 @@ input.weui-btn_plain-default {
 .weui-btn-area_inline .weui-btn:last-child {
   margin-right: 0;
 }
+
 .weui-cells {
-  margin-top: 1.17647059em;
   background-color: #FFFFFF;
   line-height: 1.41176471;
   font-size: 17px;
@@ -2329,7 +2329,7 @@ input[type="search"]::-webkit-search-results-decoration {
 }
 .weui-agree {
   display: block;
-  padding: .5em 15px;
+  padding: 1em 15px 0;
   font-size: 13px;
 }
 .weui-agree a {

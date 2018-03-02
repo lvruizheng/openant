@@ -1,12 +1,18 @@
 <?php echo $header;//装载header?>
 
 <style>
-body{background:#323542;}
 </style>
 
 <!--主体-->
+
+<header class="wy-header">
+  <div class="wy-header-icon-back">
+	<a href="javascript:;" class="back" onclick="window.history.go(-1);"><span></span></a>
+  </div>
+  <div class="wy-header-title"><?php echo lang_line('login');?></div>
+</header>
+
 <div class="login-box">
-  	<div class="lg-title"><?php echo lang_line('login');?></div>
     <div class="login-form">
 		<form action="<?php echo $this->config->item('catalog').'user/signin/login?url='.$this->input->get('url');?>" method="post" enctype="multipart/form-data" id="signin">
 

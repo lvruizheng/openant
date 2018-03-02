@@ -1,9 +1,24 @@
 <?php echo $header;//装载header?>
-
+<style>
+	html{
+		height: 100%;
+	}
+	input[type="checkbox"], input[type="radio"]{
+		margin-right: 5px;
+	}	
+	.weui-cells{
+		margin-top: 0;
+	}
+	.weui-content{
+		height: 100%;
+	}
+</style>
 
 <!--主体-->
 <header class="wy-header">
-  <div class="wy-header-icon-back"><span></span></div>
+  <div class="wy-header-icon-back">
+	<a href="javascript:;" class="back" onclick="window.history.go(-1);"><span></span></a>
+  </div>
   <div class="wy-header-title"><?php echo lang_line('register');?></div>
 </header>
 <div class="weui-content">
